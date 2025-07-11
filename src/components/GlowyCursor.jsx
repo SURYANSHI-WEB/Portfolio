@@ -14,18 +14,18 @@ export default function GlowyCursor() {
   const [hovered, setHovered] = useState(false);
   const [pos, setPos] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const [trail, setTrail] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+  const [isTouching, setIsTouching] = useState(false);
   const requestRef = useRef();
   const cursorRef = useRef();
 
-  // Only show on desktop
+  // Show on all devices now
   useEffect(() => {
-    if (isTouchDevice()) return;
     setVisible(true);
   }, []);
 
-  // Mouse move and trail
+  // Mouse move and trail (desktop)
   useEffect(() => {
-    if (!visible) return;
+    if (!visible || isTouchDevice()) return;
     const handleMove = (e) => {
       setPos({ x: e.clientX, y: e.clientY });
     };
@@ -33,13 +33,43 @@ export default function GlowyCursor() {
     return () => window.removeEventListener("mousemove", handleMove);
   }, [visible]);
 
+  // Touch events (mobile)
+  useEffect(() => {
+    if (!visible || !isTouchDevice()) return;
+    
+    const handleTouchStart = (e) => {
+      const touch = e.touches[0];
+      setPos({ x: touch.clientX, y: touch.clientY });
+      setIsTouching(true);
+    };
+    
+    const handleTouchMove = (e) => {
+      const touch = e.touches[0];
+      setPos({ x: touch.clientX, y: touch.clientY });
+    };
+    
+    const handleTouchEnd = () => {
+      setIsTouching(false);
+    };
+    
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchend", handleTouchEnd);
+    
+    return () => {
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [visible]);
+
   // Animate trailing effect
   useEffect(() => {
     if (!visible) return;
     const animate = () => {
       setTrail((prev) => ({
-        x: prev.x + (pos.x - prev.x) * 0.18,
-        y: prev.y + (pos.y - prev.y) * 0.18,
+        x: prev.x + (pos.x - prev.x) * (isTouchDevice() ? 0.3 : 0.18),
+        y: prev.y + (pos.y - prev.y) * (isTouchDevice() ? 0.3 : 0.18),
       }));
       requestRef.current = requestAnimationFrame(animate);
     };
@@ -47,9 +77,9 @@ export default function GlowyCursor() {
     return () => cancelAnimationFrame(requestRef.current);
   }, [pos, visible]);
 
-  // Hover detection for clickable elements
+  // Hover detection for clickable elements (desktop only)
   useEffect(() => {
-    if (!visible) return;
+    if (!visible || isTouchDevice()) return;
     const checkHover = (e) => {
       const el = e.target;
       if (
@@ -64,9 +94,9 @@ export default function GlowyCursor() {
     return () => window.removeEventListener("mousemove", checkHover);
   }, [visible]);
 
-  // Hide cursor when leaving window
+  // Hide cursor when leaving window (desktop only)
   useEffect(() => {
-    if (!visible) return;
+    if (!visible || isTouchDevice()) return;
     const hide = () => setVisible(false);
     const show = () => setVisible(true);
     window.addEventListener("mouseleave", hide);
@@ -78,6 +108,11 @@ export default function GlowyCursor() {
   }, [visible]);
 
   if (!visible) return null;
+
+  const isMobile = isTouchDevice();
+  const baseSize = isMobile ? 20 : 28;
+  const hoverSize = isMobile ? 32 : 48;
+  const currentSize = (isMobile && isTouching) || hovered ? hoverSize : baseSize;
 
   return createPortal(
     <div
@@ -95,20 +130,20 @@ export default function GlowyCursor() {
       <div
         style={{
           position: "absolute",
-          left: trail.x - (hovered ? 24 : 14),
-          top: trail.y - (hovered ? 24 : 14),
-          width: hovered ? 48 : 28,
-          height: hovered ? 48 : 28,
+          left: trail.x - currentSize / 2,
+          top: trail.y - currentSize / 2,
+          width: currentSize,
+          height: currentSize,
           borderRadius: "50%",
-          background: hovered
+          background: (isMobile && isTouching) || hovered
             ? "radial-gradient(circle, #00bfff 60%, #0ff 100%)"
             : "radial-gradient(circle, #00bfff 60%, #222 100%)",
-          boxShadow: hovered
+          boxShadow: (isMobile && isTouching) || hovered
             ? "0 0 32px 12px #00bfff88, 0 0 0 2px #0ff"
             : "0 0 16px 4px #00bfff55",
           transition: "width 0.18s, height 0.18s, box-shadow 0.18s, background 0.18s",
           mixBlendMode: "screen",
-          opacity: 0.85,
+          opacity: isMobile ? 0.7 : 0.85,
         }}
       />
     </div>,

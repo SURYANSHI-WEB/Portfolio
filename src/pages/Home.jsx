@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useRef } from "react";
-import { projects, skills, certs, about, contact, stats } from "../data";
+import { projects, skills, certificates, about, contact, stats } from "../data";
 import AboutSection from "../components/AboutSection";
 import ProjectsSection from "../components/ProjectsSection";
 import ContactSection from "../components/ContactSection";
@@ -101,7 +101,7 @@ export default function Home() {
         <LiveCodingBar />
 
         {/* About Section */}
-        <AboutSection about={about} skills={skills} certs={certs} aboutImgRef={aboutImgRef} fadeUp={fadeUp} />
+        <AboutSection about={about} skills={skills} certificates={certificates} aboutImgRef={aboutImgRef} fadeUp={fadeUp} />
 
         {/* Projects Section */}
         <ProjectsSection projects={projects} sectionVariants={sectionVariants} fadeUp={fadeUp} fadeUpCard={fadeUpCard} />

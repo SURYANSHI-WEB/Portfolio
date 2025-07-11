@@ -12,6 +12,7 @@ const orbitronFont = {
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -95,7 +96,7 @@ function Navbar() {
           >
             SSS
           </motion.a>
-          
+          {/* Desktop nav */}
           <nav className="hidden md:flex space-x-8" role="navigation" aria-label="Section navigation">
             <NavSectionLink onClick={handleNavSection("about")} title="Meet the human behind the code">About</NavSectionLink>
             <NavSectionLink onClick={handleNavSection("projects")} title="See what I’ve been building at 2am">Projects</NavSectionLink>
@@ -110,15 +111,15 @@ function Navbar() {
             </Link>
             <NavSectionLink onClick={handleNavSection("contact")} title="Coffee strong?">Contact</NavSectionLink>
           </nav>
-
           <div className="flex items-center gap-4">
             <ThemeToggle />
             {/* Mobile menu button */}
             <button 
               className="md:hidden text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-black rounded p-1"
               aria-label="Open mobile menu"
-              aria-expanded="false"
+              aria-expanded={mobileOpen}
               title="Open navigation menu"
+              onClick={() => setMobileOpen((v) => !v)}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -126,6 +127,24 @@ function Navbar() {
             </button>
           </div>
         </div>
+        {/* Mobile nav overlay */}
+        {mobileOpen && (
+          <div className="fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center md:hidden transition-all">
+            <button
+              className="absolute top-6 right-6 text-white text-3xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-black rounded"
+              aria-label="Close mobile menu"
+              onClick={() => setMobileOpen(false)}
+            >
+              &times;
+            </button>
+            <nav className="flex flex-col gap-8 text-2xl text-white font-bold items-center" role="navigation" aria-label="Mobile navigation">
+              <button onClick={e => { setMobileOpen(false); handleNavSection("about")(e); }} className="hover:text-blue-400 transition-colors">About</button>
+              <button onClick={e => { setMobileOpen(false); handleNavSection("projects")(e); }} className="hover:text-blue-400 transition-colors">Projects</button>
+              <Link to="/resume" onClick={() => setMobileOpen(false)} className="hover:text-blue-400 transition-colors">Resume</Link>
+              <button onClick={e => { setMobileOpen(false); handleNavSection("contact")(e); }} className="hover:text-blue-400 transition-colors">Contact</button>
+            </nav>
+          </div>
+        )}
       </motion.div>
     </motion.nav>
   );

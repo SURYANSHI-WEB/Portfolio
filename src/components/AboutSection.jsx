@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useSectionAnimation } from "../hooks/useSectionAnimation";
 // import KineticTitle from "./KineticTitle";
 
-export default function AboutSection({ about, skills, certs, aboutImgRef }) {
+export default function AboutSection({ about, skills, certificates, aboutImgRef }) {
   const { fadeUp } = useSectionAnimation();
   return (
     <motion.section
@@ -51,9 +51,9 @@ export default function AboutSection({ about, skills, certs, aboutImgRef }) {
               </div>
             </motion.div>
             <motion.div variants={fadeUp}>
-              <h3 className="text-2xl mb-4">certs</h3>
+              <h3 className="text-2xl mb-4">certificates</h3>
               <ul className="relative border-l-2 border-blue-700 ml-4">
-                {certs.map((cert, i) => (
+                {certificates.map((cert, i) => (
                   <motion.li
                     key={i}
                     className="mb-6 ml-6 text-gray-200 flex items-center gap-2"

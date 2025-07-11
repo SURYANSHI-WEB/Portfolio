@@ -49,7 +49,7 @@ export const skills = [
   "communication"
 ];
 
-export const certs = [
+export const certificates = [
   "project management (rayat bahra)",
   "python web dev (ict academy)",
   "core java & sql (mcp tech)"
