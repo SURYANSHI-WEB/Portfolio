@@ -40,6 +40,19 @@ function Navbar() {
     }
   };
 
+  // Scroll to hero section (top) from anywhere
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    if (location.pathname !== "/") {
+      navigate("/", { replace: false });
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 100);
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   // Inject Google Fonts link for Orbitron
   useEffect(() => {
     if (!document.getElementById('orbitron-font')) {
@@ -77,22 +90,25 @@ function Navbar() {
             whileHover={{ scale: 1.05 }}
             aria-label="Go to top of page"
             style={orbitronFont}
+            onClick={handleLogoClick}
+            title="Back to the top (hero section)"
           >
             SSS
           </motion.a>
           
           <nav className="hidden md:flex space-x-8" role="navigation" aria-label="Section navigation">
-            <NavSectionLink onClick={handleNavSection("about")}>About</NavSectionLink>
-            <NavSectionLink onClick={handleNavSection("projects")}>Projects</NavSectionLink>
+            <NavSectionLink onClick={handleNavSection("about")} title="Meet the human behind the code">About</NavSectionLink>
+            <NavSectionLink onClick={handleNavSection("projects")} title="See what I’ve been building at 2am">Projects</NavSectionLink>
             <Link 
               to="/resume" 
               className="text-gray-300 hover:text-white transition-colors duration-300 relative group focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-black rounded px-2 py-1"
               aria-label="View resume"
+              title="My secret identity (a.k.a. my resume)"
             >
               Resume
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <NavSectionLink onClick={handleNavSection("contact")}>Contact</NavSectionLink>
+            <NavSectionLink onClick={handleNavSection("contact")} title="Coffee strong?">Contact</NavSectionLink>
           </nav>
 
           <div className="flex items-center gap-4">
@@ -102,6 +118,7 @@ function Navbar() {
               className="md:hidden text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-black rounded p-1"
               aria-label="Open mobile menu"
               aria-expanded="false"
+              title="Open navigation menu"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -114,7 +131,7 @@ function Navbar() {
   );
 }
 
-function NavSectionLink({ onClick, children }) {
+function NavSectionLink({ onClick, children, title }) {
   return (
     <motion.a
       href="#"
@@ -122,6 +139,7 @@ function NavSectionLink({ onClick, children }) {
       className="text-gray-300 hover:text-white transition-colors duration-300 relative group cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-black rounded px-2 py-1"
       whileHover={{ scale: 1.05 }}
       aria-label={`Navigate to ${children.toLowerCase()} section`}
+      title={title}
     >
       {children}
       <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>

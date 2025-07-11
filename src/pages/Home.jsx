@@ -7,6 +7,8 @@ import ContactSection from "../components/ContactSection";
 import StatsSection from "../components/StatsSection";
 import { useSectionAnimation } from "../hooks/useSectionAnimation";
 import SectionDots from "../components/SectionDots";
+import ParallaxBackground from "../components/ParallaxBackground";
+import LiveCodingBar from "../components/LiveCodingBar";
 
 // Parallax helper
 function useParallax(offset = 40) {
@@ -39,53 +41,64 @@ export default function Home() {
     <>
       <SectionDots />
       <main className="min-h-screen bg-black text-white">
-        {/* Hero Section with parallax */}
-        <motion.section
-          ref={heroRef}
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          className="h-screen flex flex-col justify-center items-center px-6 relative overflow-hidden"
-        >
-          <motion.div variants={fadeUp} className="text-center max-w-4xl mx-auto">
-            <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl lg:text-8xl mb-6 leading-tight">
-              Suryanshi Singh
-            </motion.h1>
-            <motion.p variants={fadeUp} className="text-xl md:text-2xl text-gray-400 font-light">
-              code. coffee. repeat.
-            </motion.p>
-          </motion.div>
-          <motion.div variants={fadeUp} className="mb-12">
-            <motion.p variants={fadeUp} className="text-lg md:text-xl text-gray-300 max-w-xl md:max-w-none mx-auto leading-relaxed md:whitespace-nowrap">
-              computer science engineer. i build, deploy, and sometimes break things (on purpose).
-            </motion.p>
-          </motion.div>
-          <motion.div
-            variants={fadeUp}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+        {/* Hero Section with parallax in a contained box */}
+        <div className="w-full flex justify-center items-center pt-12 pb-16">
+          <div
+            className="relative w-full max-w-4xl rounded-3xl border border-gray-700 bg-black/90 shadow-2xl overflow-hidden"
+            style={{ minHeight: "60vh" }}
           >
-            <motion.a
-              href="#projects"
-              className="bg-white text-black px-8 py-4 rounded-full font-medium hover:bg-gray-200 transition-all duration-300 relative group"
-              whileHover={{ scale: 1.07 }}
+            <ParallaxBackground contained />
+            <motion.section
+              ref={heroRef}
+              variants={sectionVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              className="h-[60vh] flex flex-col justify-center items-center px-6 relative z-10"
             >
-              projects
-              <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full"></span>
-            </motion.a>
-            <motion.a
-              href="#contact"
-              className="border border-white text-white px-8 py-4 rounded-full font-medium hover:bg-white hover:text-black transition-all duration-300 relative group"
-              whileHover={{ scale: 1.07 }}
-            >
-              contact
-              <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
-            </motion.a>
-          </motion.div>
-        </motion.section>
+              <motion.div variants={fadeUp} className="text-center max-w-4xl mx-auto">
+                <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl lg:text-8xl mb-6 leading-tight">
+                  Suryanshi Singh
+                </motion.h1>
+                <motion.p variants={fadeUp} className="text-xl md:text-2xl text-gray-400 font-light">
+                  code. coffee. repeat.
+                </motion.p>
+              </motion.div>
+              <motion.div variants={fadeUp} className="mb-12">
+                <motion.p variants={fadeUp} className="text-lg md:text-xl text-gray-300 max-w-xl md:max-w-none mx-auto leading-relaxed md:whitespace-nowrap">
+                  computer science engineer. i build, deploy, and sometimes break things (on purpose).
+                </motion.p>
+              </motion.div>
+              <motion.div
+                variants={fadeUp}
+                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              >
+                <motion.a
+                  href="#projects"
+                  className="bg-white text-black px-8 py-4 rounded-full font-medium hover:bg-gray-200 transition-all duration-300 relative group"
+                  whileHover={{ scale: 1.07 }}
+                >
+                  projects
+                  <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-black transition-all duration-300 group-hover:w-full"></span>
+                </motion.a>
+                <motion.a
+                  href="#contact"
+                  className="border border-white text-white px-8 py-4 rounded-full font-medium hover:bg-white hover:text-black transition-all duration-300 relative group"
+                  whileHover={{ scale: 1.07 }}
+                >
+                  contact
+                  <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
+                </motion.a>
+              </motion.div>
+            </motion.section>
+          </div>
+        </div>
 
         {/* Stats Section */}
         <StatsSection stats={stats} />
+
+        {/* Live Coding Bar below stats */}
+        <LiveCodingBar />
 
         {/* About Section */}
         <AboutSection about={about} skills={skills} certs={certs} aboutImgRef={aboutImgRef} fadeUp={fadeUp} />

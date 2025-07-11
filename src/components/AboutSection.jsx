@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useSectionAnimation } from "../hooks/useSectionAnimation";
+// import KineticTitle from "./KineticTitle";
 
 export default function AboutSection({ about, skills, certs, aboutImgRef }) {
   const { fadeUp } = useSectionAnimation();
